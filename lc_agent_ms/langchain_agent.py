@@ -1,15 +1,14 @@
 from langchain.agents import initialize_agent
 from langchain_openai import ChatOpenAI
 from langchain.tools import Tool
-from gradio_styles import Seafoam
 import gradio as gr
 from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
 import requests
 
-RAG_SERVICE_URL = "http://localhost:8001/biography"
-SPAM_SERVICE_URL = "http://localhost:8002/detect_spam"
+RAG_SERVICE_URL = "http://rag:8001/biography"
+SPAM_SERVICE_URL = "http://spam:8002/detect_spam"
 
 def biography_req(query: str) -> str:
     try:
@@ -27,7 +26,7 @@ def spam_req(query: str) -> str:
         data = response.json()
         label = data.get("label", "Unknown")
         probability = data.get("probability")
-        return f"Label: {label}, Probability: {probability:.4f}%"
+        return f"Label: {label}, Probability: {probability:.4f}"
     except Exception as e:
         return f"Error in spam_tool: {e}"
 
@@ -50,8 +49,6 @@ default_tool = Tool(
 )
 
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-
-seafoam=Seafoam()
 
 tools = [spam_detection_tool, rag_tool, default_tool]
 agent = initialize_agent(
@@ -79,4 +76,4 @@ def query_endpoint(request: QueryRequest):
     return QueryResponse(response=result)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8003)

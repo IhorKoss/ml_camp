@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  rag:
+    build:
+      context: ./rag_ms
+      dockerfile: Dockerfile.rag
+    ports:
+      - "8001:8001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+  spam:
+    build:
+      context: ./spam_detect_ms
+      dockerfile: Dockerfile.spam
+    ports:
+      - "8002:8002"
+  agent:
+    build:
+      context: ./lc_agent_ms
+      dockerfile: Dockerfile.langchain
+    ports:
+      - "8003:8003"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}

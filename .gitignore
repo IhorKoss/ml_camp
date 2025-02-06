@@ -1,5 +1,4 @@
 .env
 venv
-chroma_index
 .gradio
-chroma_index_hash.txt
+__pycache__

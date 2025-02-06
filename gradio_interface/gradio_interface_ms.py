@@ -3,7 +3,7 @@ import requests
 from gradio_styles import Seafoam
 
 
-API_URL = "http://localhost:8000/query"
+API_URL = "http://localhost:8003/query"
 seafoam=Seafoam()
 
 def send_query(user_query):
@@ -32,5 +32,4 @@ with gr.Blocks(theme=seafoam) as iface:
 
 
 if __name__ == "__main__":
-    print("Agent initialized. Check terminal for Gradio URL\n")
     iface.launch(share=True, debug=True)

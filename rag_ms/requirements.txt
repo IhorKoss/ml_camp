@@ -1,0 +1,8 @@
+fastapi==0.115.8
+langchain==0.3.17
+langchain_chroma==0.2.1
+langchain_openai==0.3.3
+pydantic==2.10.6
+PyPDF2==3.0.1
+python-dotenv==1.0.1
+uvicorn==0.34.0

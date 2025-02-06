@@ -1,6 +1,7 @@
 from transformers import TFAutoModelForSequenceClassification, RobertaTokenizerFast, TextClassificationPipeline
 from fastapi import FastAPI
 from pydantic import BaseModel
+import uvicorn
 
 loaded_model = TFAutoModelForSequenceClassification.from_pretrained("coconutsc/roberta_email_sms_spam_classifier")
 tokenizer = RobertaTokenizerFast.from_pretrained("roberta-base")
@@ -29,5 +30,4 @@ def detect_spam_endpoint(request: SpamQuery):
     return SpamResponse(label=result["label"], probability=result["probability"])
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8002)

@@ -8,12 +8,13 @@ from langchain.chains import RetrievalQA
 from langchain import hub
 import PyPDF2
 import hashlib
-
+import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 os.environ["LANGSMITH_TRACING_V2"] = "false"
 
@@ -37,8 +38,8 @@ def extract_text_from_pdf(pdf_path):
         text = " ".join(page.extract_text() for page in reader.pages)
     return text
 
-bio_text = load_biography("C:\ml_camp\\bio.txt")
-cv_text = extract_text_from_pdf("C:\ml_camp\CV.pdf")
+bio_text = load_biography(os.path.join(current_dir, "bio.txt"))
+cv_text = extract_text_from_pdf(os.path.join(current_dir, "CV.pdf"))
 combined_text = bio_text + "\n\n" + cv_text
 
 def create_vectorstore(texts, embeddings):
@@ -105,5 +106,4 @@ def biography_endpoint(request: BiographyQuery):
     return BiographyResponse(answer=answer)
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
